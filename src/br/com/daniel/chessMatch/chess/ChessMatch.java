@@ -1,7 +1,6 @@
 package br.com.daniel.chessMatch.chess;
 
 import br.com.daniel.chessMatch.boardgame.Board;
-import br.com.daniel.chessMatch.boardgame.Piece;
 import br.com.daniel.chessMatch.boardgame.Position;
 import br.com.daniel.chessMatch.chess.Pieces.King;
 import br.com.daniel.chessMatch.chess.Pieces.Rook;
@@ -41,8 +40,10 @@ public class ChessMatch {
     }
 
     public void InitialSetup (){
-        board.placePiece(new Rook(board, Color.BLACK), new Position(0,0));
+        board.placePiece(new Rook(board, Color.BLACK), new Position(0,2));
         board.placePiece(new King(board, Color.WHITE), new Position(0,1));
+        board.placePiece(new King(board, Color.WHITE), new Position(0,1));
+
     }
 
 }
