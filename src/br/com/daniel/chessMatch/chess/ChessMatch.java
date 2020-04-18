@@ -1,8 +1,6 @@
 package br.com.daniel.chessMatch.chess;
 
 import br.com.daniel.chessMatch.boardgame.Board;
-import br.com.daniel.chessMatch.boardgame.Position;
-import br.com.daniel.chessMatch.chess.Pieces.King;
 import br.com.daniel.chessMatch.chess.Pieces.Rook;
 
 public class ChessMatch {
@@ -39,11 +37,17 @@ public class ChessMatch {
         return chessPieces;
     }
 
-    public void InitialSetup (){
-        board.placePiece(new Rook(board, Color.BLACK), new Position(0,2));
-        board.placePiece(new King(board, Color.WHITE), new Position(0,1));
-        board.placePiece(new King(board, Color.WHITE), new Position(0,1));
+/*  O método @placeNewPiece pega as coordenadas do Xadrez(ex: b1)
+    e converte (utilizando ChessPosition)   em int para que possa ser alocada no vetor (utilizando
+    @board.placePiece
+ */
+    private void placeNewPiece (char colum, int row, ChessPiece piece){
+        board.placePiece(piece, new ChessPosition(colum, row).toPosition());
+    }
 
+    public void InitialSetup (){
+        placeNewPiece('b', 8, new Rook(board, Color.BLACK));
+        placeNewPiece('h', 3, new Rook(board, Color.BLACK));
     }
 
 }

@@ -1,13 +1,9 @@
 package br.com.daniel.chessMatch.application;
-
-import br.com.daniel.chessMatch.boardgame.Piece;
-import br.com.daniel.chessMatch.chess.ChessMatch;
 import br.com.daniel.chessMatch.chess.ChessPiece;
 
 public class UI {
 
-
-    public static void prinBoard(ChessPiece[][] chessPiece) {
+    public static void printBoard(ChessPiece[][] chessPiece) {
 
         for(int i=0; i < chessPiece.length; i++){
             System.out.print((8-i) + " ");
