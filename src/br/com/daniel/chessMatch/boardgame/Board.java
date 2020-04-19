@@ -40,6 +40,17 @@ public class Board {
         return this.pieces[row][column];
     }
 
+    public Piece removePiece(Position position){
+        positionExists(position);
+        if(!thereIsAPiece(position)) return null;
+
+        Piece aux = this.getPiece(position);
+        aux.position = null;
+        pieces[position.getRow()] [position.getColum()] = null;
+
+        return aux;
+    }
+
     public boolean positionExists (Position position){
         return positionExists(position.getRow(), position.getColum());
     }

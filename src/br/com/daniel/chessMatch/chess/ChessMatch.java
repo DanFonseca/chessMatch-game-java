@@ -1,8 +1,11 @@
 package br.com.daniel.chessMatch.chess;
 
 import br.com.daniel.chessMatch.boardgame.Board;
+import br.com.daniel.chessMatch.boardgame.Piece;
+import br.com.daniel.chessMatch.boardgame.Position;
 import br.com.daniel.chessMatch.chess.Pieces.King;
 import br.com.daniel.chessMatch.chess.Pieces.Rook;
+import br.com.daniel.chessMatch.exceptions.ChessException;
 
 public class ChessMatch {
     private int turn;
@@ -60,6 +63,38 @@ public class ChessMatch {
         placeNewPiece('e', 7, new Rook(board, Color.BLACK));
         placeNewPiece('e', 8, new Rook(board, Color.BLACK));
         placeNewPiece('d', 8, new King(board, Color.BLACK));
+    }
+
+    public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition){
+        Position source = sourcePosition.toPosition();
+        Position target = targetPosition.toPosition();
+
+        validateSourcePiece (sourcePosition);
+
+        Piece capturedPiece = makeMovie (source, target);
+        System.out.println(capturedPiece);
+
+
+        //downcast ↓ (ChessPiece ← Piece)
+        return (ChessPiece) capturedPiece;
+    }
+
+    private Piece makeMovie(Position source, Position target) {
+        Piece capturedPiece = board.removePiece(target);
+        Piece sourcePiece =  board.removePiece(source);
+
+        System.out.println("Target: " + capturedPiece);
+        System.out.println("Source"+ sourcePiece);
+
+        board.placePiece(sourcePiece, target);
+
+        return  capturedPiece;
+    }
+
+    private void validateSourcePiece(ChessPosition sourcePosition) {
+        if(!board.thereIsAPiece(sourcePosition.toPosition())){
+            throw new  ChessException("There is no a Piece on this Position");
+        }
     }
 
 }

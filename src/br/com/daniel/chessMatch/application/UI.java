@@ -1,9 +1,11 @@
 package br.com.daniel.chessMatch.application;
 
 import br.com.daniel.chessMatch.chess.ChessPiece;
+import br.com.daniel.chessMatch.chess.ChessPosition;
 import br.com.daniel.chessMatch.chess.Color;
+import br.com.daniel.chessMatch.exceptions.ChessException;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.util.Scanner;
 
 public class UI {
 
@@ -26,13 +28,26 @@ public class UI {
     public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
-    public static void printBoard(ChessPiece[][] chessPiece) {
 
+    public static ChessPosition readChessPosition (Scanner sc){
+        try {
+            String s = sc.next();
+            char colum = s.charAt(0);
+            int row = Integer.parseInt(s.substring(1));
+            return new ChessPosition(colum, row);
+        }catch (RuntimeException e){
+            throw new ChessException("Error instantiating ChessPosition: Position must be a1 to h8.");
+        }
+    }
+
+    public static void printBoard(ChessPiece[][] chessPiece) {
+        System.out.println("  a b c d e f g h");
         for (int i = 0; i < chessPiece.length; i++) {
             System.out.print((8 - i) + " ");
             for (int j = 0; j < chessPiece[i].length; j++) {
                 printPiece(chessPiece[i][j]);
             }
+            System.out.print((8 - i) + " ");
             System.out.println();
         }
         System.out.println("  a b c d e f g h");
