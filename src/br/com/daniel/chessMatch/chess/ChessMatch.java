@@ -75,17 +75,13 @@ public class ChessMatch {
         System.out.println(capturedPiece);
 
 
-        //downcast ↓ (ChessPiece ← Piece)
+        //downcast  (ChessPiece <- Piece)
         return (ChessPiece) capturedPiece;
     }
 
     private Piece makeMovie(Position source, Position target) {
         Piece capturedPiece = board.removePiece(target);
         Piece sourcePiece =  board.removePiece(source);
-
-        System.out.println("Target: " + capturedPiece);
-        System.out.println("Source"+ sourcePiece);
-
         board.placePiece(sourcePiece, target);
 
         return  capturedPiece;
