@@ -69,7 +69,7 @@ public class ChessMatch {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
 
-        validateSourcePiece (sourcePosition);
+        validateSourcePosition(source);
 
         Piece capturedPiece = makeMovie (source, target);
         System.out.println(capturedPiece);
@@ -87,10 +87,16 @@ public class ChessMatch {
         return  capturedPiece;
     }
 
-    private void validateSourcePiece(ChessPosition sourcePosition) {
-        if(!board.thereIsAPiece(sourcePosition.toPosition())){
+    private void validateSourcePosition(Position sourcePosition) {
+
+        if(!board.thereIsAPiece(sourcePosition)){
             throw new  ChessException("There is no a Piece on this Position");
         }
+
+        if(!board.getPiece(sourcePosition).isThereAnyPossibleMove()){
+            throw new  ChessException("There is no possible moves for the chosen piece");
+        }
+
     }
 
 }

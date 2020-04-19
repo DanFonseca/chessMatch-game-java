@@ -4,6 +4,7 @@ import br.com.daniel.chessMatch.chess.ChessMatch;
 import br.com.daniel.chessMatch.chess.ChessPosition;
 import br.com.daniel.chessMatch.exceptions.ChessException;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Program {

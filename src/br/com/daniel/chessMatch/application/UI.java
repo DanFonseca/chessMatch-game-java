@@ -5,6 +5,7 @@ import br.com.daniel.chessMatch.chess.ChessPosition;
 import br.com.daniel.chessMatch.chess.Color;
 import br.com.daniel.chessMatch.exceptions.ChessException;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class UI {
