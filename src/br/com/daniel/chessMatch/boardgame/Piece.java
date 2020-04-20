@@ -15,12 +15,21 @@ public abstract class Piece {
         return board;
     }
 
+    /*
+        Método abstrado para que as classes especializadas implementem.
+     */
     public abstract boolean[][] possibleMoves();
-
+    /**
+        Método concreeto que recebe uma determinada @Position
+        Este método irá chamar a classe abstrata, utirlizando a técnica de Hook Method
+     **/
     public boolean possibleMoves(Position position) {
         return possibleMoves()[position.getRow()][position.getColum()];
     }
 
+    /*
+        Verifica os movimentos possiveis de cada Peça.
+     */
     public boolean isThereAnyPossibleMove() {
 
         boolean mat[][] = possibleMoves();

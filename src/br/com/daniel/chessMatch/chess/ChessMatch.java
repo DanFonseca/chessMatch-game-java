@@ -49,6 +49,9 @@ public class ChessMatch {
         board.placePiece(piece, new ChessPosition(colum, row).toPosition());
     }
 
+    /*
+        montando o tabuleiro na inicilizaçao do programa.
+     */
     public void InitialSetup (){
         placeNewPiece('c', 1, new Rook(board, Color.WHITE));
         placeNewPiece('c', 2, new Rook(board, Color.WHITE));
@@ -65,11 +68,15 @@ public class ChessMatch {
         placeNewPiece('d', 8, new King(board, Color.BLACK));
     }
 
+    /*
+        montando o tabuleiro na inicilizaçao do programa.
+     */
     public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition){
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
 
         validateSourcePosition(source);
+        validateTargePosition(source, target);
 
         Piece capturedPiece = makeMovie (source, target);
         System.out.println(capturedPiece);
@@ -79,9 +86,25 @@ public class ChessMatch {
         return (ChessPiece) capturedPiece;
     }
 
+    /**
+        @validateTargePosition: Este método verifica se da posiçao de partida até a posiçao
+        que a peça chegará, será válida.
+     **/
+    private void validateTargePosition(Position source, Position target) {
+        /**
+            Verificaçao pegando o objeto @source e acessando este objeto o método
+            @possibleMoves passando como parametro a variavel @target
+         **/
+        if(!board.getPiece(source).possibleMoves(target)){
+            throw new ChessException("There is no possible moves for this chosen Piece.");
+        }
+    }
+
+
     private Piece makeMovie(Position source, Position target) {
         Piece capturedPiece = board.removePiece(target);
         Piece sourcePiece =  board.removePiece(source);
+
         board.placePiece(sourcePiece, target);
 
         return  capturedPiece;
@@ -96,7 +119,7 @@ public class ChessMatch {
         if(!board.getPiece(sourcePosition).isThereAnyPossibleMove()){
             throw new  ChessException("There is no possible moves for the chosen piece");
         }
-
     }
+
 
 }
