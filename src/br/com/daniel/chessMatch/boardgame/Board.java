@@ -63,7 +63,7 @@ public class Board {
     }
 
     public boolean positionExists (int row, int colum){
-        return  colum >= 0 && colum < columns && rows >=0 && row < rows;
+        return (row >=0 && colum >=0) && (row < rows && colum < columns);
     }
 
     //Verifica se em uma determinada @Position existe uma peça.

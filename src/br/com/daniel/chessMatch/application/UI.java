@@ -30,13 +30,13 @@ public class UI {
     public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
 
-    public static ChessPosition readChessPosition (Scanner sc){
+    public static ChessPosition readChessPosition(Scanner sc) {
         try {
             String s = sc.next();
             char colum = s.charAt(0);
             int row = Integer.parseInt(s.substring(1));
             return new ChessPosition(colum, row);
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new ChessException("Error instantiating ChessPosition: Position must be a1 to h8.");
         }
     }
@@ -46,7 +46,7 @@ public class UI {
         for (int i = 0; i < chessPiece.length; i++) {
             System.out.print((8 - i) + " ");
             for (int j = 0; j < chessPiece[i].length; j++) {
-                printPiece(chessPiece[i][j]);
+                printPiece(chessPiece[i][j], false);
             }
             System.out.print((8 - i) + " ");
             System.out.println();
@@ -54,9 +54,26 @@ public class UI {
         System.out.println("  a b c d e f g h");
     }
 
-    public static void printPiece(ChessPiece piece) {
+    public static void printBoard(ChessPiece[][] chessPiece, boolean[][] possibleMoves) {
+        System.out.println("  a b c d e f g h");
+        for (int i = 0; i < chessPiece.length; i++) {
+            System.out.print((8 - i) + " ");
+            for (int j = 0; j < chessPiece[i].length; j++) {
+                printPiece(chessPiece[i][j], possibleMoves[i][j]);
+            }
+            System.out.print((8 - i) + " ");
+            System.out.println();
+        }
+        System.out.println("  a b c d e f g h");
+    }
+
+
+    public static void printPiece(ChessPiece piece, boolean possibleMovie) {
+        if(possibleMovie){
+            System.out.print(ANSI_RED_BACKGROUND);
+        }
         if (piece == null) {
-            System.out.print("-");
+            System.out.print("-" + ANSI_RESET );
 
         } else if (piece.getColor() == Color.WHITE) {
 
@@ -69,11 +86,14 @@ public class UI {
         System.out.print(" ");
     }
 
+
+
     // https://stackoverflow.com/questions/2979383/java-clear-the-console
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+
 
 }
 

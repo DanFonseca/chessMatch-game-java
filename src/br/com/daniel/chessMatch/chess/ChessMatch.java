@@ -79,8 +79,6 @@ public class ChessMatch {
         validateTargePosition(source, target);
 
         Piece capturedPiece = makeMovie (source, target);
-        System.out.println(capturedPiece);
-
 
         //downcast  (ChessPiece <- Piece)
         return (ChessPiece) capturedPiece;
@@ -119,6 +117,15 @@ public class ChessMatch {
         if(!board.getPiece(sourcePosition).isThereAnyPossibleMove()){
             throw new  ChessException("There is no possible moves for the chosen piece");
         }
+    }
+
+    public boolean [][] possibleMoves (ChessPosition sourcePosition){
+        Position position = sourcePosition.toPosition();
+        validateSourcePosition(position);
+        Piece p = board.getPiece(position);
+        boolean mat [][] = p.possibleMoves();
+
+       return mat;
     }
 
 
