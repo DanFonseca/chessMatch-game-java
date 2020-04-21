@@ -7,6 +7,9 @@ import br.com.daniel.chessMatch.chess.Pieces.King;
 import br.com.daniel.chessMatch.chess.Pieces.Rook;
 import br.com.daniel.chessMatch.exceptions.ChessException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChessMatch {
     private int turn;
     private Color currentPlayer;
@@ -15,14 +18,15 @@ public class ChessMatch {
     private ChessPiece enPassartVulnereble;
     private ChessPiece promoted;
 
+    List<Piece> piecesOnTheBoard = new ArrayList<>();
+    List<Piece> capturedPieces = new ArrayList<>();
+
     private Board board;
-
-
 
     public ChessMatch() {
         board = new Board(8, 8);
         currentPlayer = Color.WHITE;
-        InitialSetup ();
+        InitialSetup();
     }
 
     public Board getBoard() {
@@ -42,25 +46,26 @@ public class ChessMatch {
         ChessPiece[][] chessPieces = new ChessPiece[board.getRows()][board.getColumns()];
 
         for (int i = 0; i < chessPieces.length; i++) {
-            for (int j=0; j < chessPieces[i].length; j++) {
+            for (int j = 0; j < chessPieces[i].length; j++) {
                 chessPieces[i][j] = (ChessPiece) board.getPiece(i, j);
             }
         }
         return chessPieces;
     }
 
-/*  O método @placeNewPiece pega as coordenadas do Xadrez(ex: b1)
-    e converte (utilizando ChessPosition)   em int para que possa ser alocada no vetor (utilizando
-    @board.placePiece
- */
-    private void placeNewPiece (char colum, int row, ChessPiece piece){
+    /*  O método @placeNewPiece pega as coordenadas do Xadrez(ex: b1)
+        e converte (utilizando ChessPosition)   em int para que possa ser alocada no vetor (utilizando
+        @board.placePiece
+     */
+    private void placeNewPiece(char colum, int row, ChessPiece piece) {
         board.placePiece(piece, new ChessPosition(colum, row).toPosition());
+        piecesOnTheBoard.add(piece);
     }
 
     /*
         montando o tabuleiro na inicilizaçao do programa.
      */
-    public void InitialSetup (){
+    public void InitialSetup() {
         placeNewPiece('c', 1, new Rook(board, Color.WHITE));
         placeNewPiece('c', 2, new Rook(board, Color.WHITE));
         placeNewPiece('d', 2, new Rook(board, Color.WHITE));
@@ -79,29 +84,29 @@ public class ChessMatch {
     /*
         montando o tabuleiro na inicilizaçao do programa.
      */
-    public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition){
+    public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
         Position source = sourcePosition.toPosition();
         Position target = targetPosition.toPosition();
 
         validateSourcePosition(source);
         validateTargePosition(source, target);
         nextTurn();
-        Piece capturedPiece = makeMovie (source, target);
+        Piece capturedPiece = makeMovie(source, target);
 
         //downcast  (ChessPiece <- Piece)
         return (ChessPiece) capturedPiece;
     }
 
     /**
-        @validateTargePosition: Este método verifica se da posiçao de partida até a posiçao
-        que a peça chegará, será válida.
+     * @validateTargePosition: Este método verifica se da posiçao de partida até a posiçao
+     * que a peça chegará, será válida.
      **/
     private void validateTargePosition(Position source, Position target) {
         /**
-            Verificaçao pegando o objeto @source e acessando este objeto o método
-            @possibleMoves passando como parametro a variavel @target
+         Verificaçao pegando o objeto @source e acessando este objeto o método
+         @possibleMoves passando como parametro a variavel @target
          **/
-        if(!board.getPiece(source).possibleMoves(target)){
+        if (!board.getPiece(source).possibleMoves(target)) {
             throw new ChessException("There is no possible moves for this chosen Piece.");
         }
     }
@@ -109,41 +114,46 @@ public class ChessMatch {
 
     private Piece makeMovie(Position source, Position target) {
         Piece capturedPiece = board.removePiece(target);
-        Piece sourcePiece =  board.removePiece(source);
+        Piece sourcePiece = board.removePiece(source);
 
         board.placePiece(sourcePiece, target);
 
-        return  capturedPiece;
+        if (capturedPiece != null) {
+            piecesOnTheBoard.remove(capturedPiece);
+            capturedPieces.add(capturedPiece);
+        }
+
+        return capturedPiece;
     }
 
     private void validateSourcePosition(Position sourcePosition) {
 
-        if(!board.thereIsAPiece(sourcePosition)){
-            throw new  ChessException("There is no a Piece on this Position");
+        if (!board.thereIsAPiece(sourcePosition)) {
+            throw new ChessException("There is no a Piece on this Position");
         }
-        ChessPiece p = (ChessPiece)board.getPiece(sourcePosition);
+        ChessPiece p = (ChessPiece) board.getPiece(sourcePosition);
 
-        if(currentPlayer  != p.getColor()){
+        if (currentPlayer != p.getColor()) {
             throw new ChessException("The chosne Piece is not yours");
         }
 
-        if(!board.getPiece(sourcePosition).isThereAnyPossibleMove()){
-            throw new  ChessException("There is no possible moves for the chosen piece");
+        if (!board.getPiece(sourcePosition).isThereAnyPossibleMove()) {
+            throw new ChessException("There is no possible moves for the chosen piece");
         }
     }
 
-    public boolean [][] possibleMoves (ChessPosition sourcePosition){
+    public boolean[][] possibleMoves(ChessPosition sourcePosition) {
         Position position = sourcePosition.toPosition();
         validateSourcePosition(position);
         Piece p = board.getPiece(position);
-        boolean mat [][] = p.possibleMoves();
+        boolean mat[][] = p.possibleMoves();
 
-       return mat;
+        return mat;
     }
 
-    private void nextTurn (){
+    private void nextTurn() {
         turn++;
-       currentPlayer = (currentPlayer == Color.WHITE ? Color.BLACK : Color.WHITE);
+        currentPlayer = (currentPlayer == Color.WHITE ? Color.BLACK : Color.WHITE);
     }
 
 }

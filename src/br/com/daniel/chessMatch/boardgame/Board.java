@@ -2,13 +2,12 @@ package br.com.daniel.chessMatch.boardgame;
 
 import br.com.daniel.chessMatch.exceptions.BoardException;
 
-import javax.print.attribute.HashPrintServiceAttributeSet;
-
 //Representação de um tabuleiro.
 
 public class Board {
     private int rows;
     private int columns;
+
     private Piece pieces [][];
 
     //@Board retorna um tabuleiro.
