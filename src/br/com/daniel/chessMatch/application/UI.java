@@ -5,6 +5,7 @@ import br.com.daniel.chessMatch.chess.ChessPiece;
 import br.com.daniel.chessMatch.chess.ChessPosition;
 import br.com.daniel.chessMatch.chess.Color;
 import br.com.daniel.chessMatch.exceptions.ChessException;
+import org.w3c.dom.ls.LSOutput;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,16 +46,18 @@ public class UI {
         }
     }
 
-    public static void PrintMatch (ChessMatch chessMatch, List<ChessPiece> pieces){
+    public static void PrintMatch(ChessMatch chessMatch, List<ChessPiece> pieces) {
         printBoard(chessMatch.getPieces());
         PrintCapturedPieces(pieces);
         System.out.println("Turn: " + chessMatch.getTurn());
         System.out.println("Current Player: " + chessMatch.getCurrentPlayer());
+
+        if (chessMatch.getCheck()) System.out.println("CHECK!");
     }
 
-    public static void PrintCapturedPieces (List<ChessPiece> pieces) {
+    public static void PrintCapturedPieces(List<ChessPiece> pieces) {
         ArrayList<ChessPiece> white = pieces.stream().filter(x -> x.getColor() == Color.WHITE).collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<ChessPiece> black = pieces.stream().filter(x-> x.getColor() == Color.BLACK).collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<ChessPiece> black = pieces.stream().filter(x -> x.getColor() == Color.BLACK).collect(Collectors.toCollection(ArrayList::new));
         System.out.println("Captured: ");
         System.out.println(ANSI_WHITE + "White: " + Arrays.toString(white.toArray()) + ANSI_RESET);
         System.out.println(ANSI_YELLOW + "Black: " + Arrays.toString(black.toArray()) + ANSI_RESET);
@@ -88,11 +91,11 @@ public class UI {
 
 
     public static void printPiece(ChessPiece piece, boolean possibleMovie) {
-        if(possibleMovie){
+        if (possibleMovie) {
             System.out.print(ANSI_RED_BACKGROUND);
         }
         if (piece == null) {
-            System.out.print("-" + ANSI_RESET );
+            System.out.print("-" + ANSI_RESET);
 
         } else if (piece.getColor() == Color.WHITE) {
 
@@ -100,11 +103,10 @@ public class UI {
 
         } else {
 
-            System.out.print(ANSI_YELLOW+ piece + ANSI_RESET);
+            System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
         }
         System.out.print(" ");
     }
-
 
 
     // https://stackoverflow.com/questions/2979383/java-clear-the-console

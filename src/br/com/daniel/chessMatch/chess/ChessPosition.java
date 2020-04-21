@@ -25,11 +25,11 @@ public class ChessPosition {
     }
 
     protected Position toPosition (){
-        return new Position(8-this.row, this.colum-'a');
+        return new Position(8-this.row, this.colum  - 'a');
     }
 
     protected static ChessPosition fromPosition (Position position){
-        return new ChessPosition((char) position.getColum(), 8 - position.getRow());
+        return new ChessPosition((char) ('a' + position.getColum()), 8 - position.getRow());
     }
 
     @Override
