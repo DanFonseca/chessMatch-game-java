@@ -1,5 +1,6 @@
 package br.com.daniel.chessMatch.application;
 
+import br.com.daniel.chessMatch.chess.ChessMatch;
 import br.com.daniel.chessMatch.chess.ChessPiece;
 import br.com.daniel.chessMatch.chess.ChessPosition;
 import br.com.daniel.chessMatch.chess.Color;
@@ -39,6 +40,12 @@ public class UI {
         } catch (RuntimeException e) {
             throw new ChessException("Error instantiating ChessPosition: Position must be a1 to h8.");
         }
+    }
+
+    public static void PrintMatch (ChessMatch chessMatch){
+        printBoard(chessMatch.getPieces());
+        System.out.println("Turn: " + chessMatch.getTurn());
+        System.out.println("Current Player: " + chessMatch.getCurrentPlayer());
     }
 
     public static void printBoard(ChessPiece[][] chessPiece) {

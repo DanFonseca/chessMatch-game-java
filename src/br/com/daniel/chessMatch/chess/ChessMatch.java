@@ -21,6 +21,7 @@ public class ChessMatch {
 
     public ChessMatch() {
         board = new Board(8, 8);
+        currentPlayer = Color.WHITE;
         InitialSetup ();
     }
 
@@ -28,6 +29,13 @@ public class ChessMatch {
         return board;
     }
 
+    public int getTurn() {
+        return turn;
+    }
+
+    public Color getCurrentPlayer() {
+        return currentPlayer;
+    }
 
     public ChessPiece[][] getPieces() {
 
@@ -77,7 +85,7 @@ public class ChessMatch {
 
         validateSourcePosition(source);
         validateTargePosition(source, target);
-
+        nextTurn();
         Piece capturedPiece = makeMovie (source, target);
 
         //downcast  (ChessPiece <- Piece)
@@ -113,6 +121,11 @@ public class ChessMatch {
         if(!board.thereIsAPiece(sourcePosition)){
             throw new  ChessException("There is no a Piece on this Position");
         }
+        ChessPiece p = (ChessPiece)board.getPiece(sourcePosition);
+
+        if(currentPlayer  != p.getColor()){
+            throw new ChessException("The chosne Piece is not yours");
+        }
 
         if(!board.getPiece(sourcePosition).isThereAnyPossibleMove()){
             throw new  ChessException("There is no possible moves for the chosen piece");
@@ -128,5 +141,9 @@ public class ChessMatch {
        return mat;
     }
 
+    private void nextTurn (){
+        turn++;
+       currentPlayer = (currentPlayer == Color.WHITE ? Color.BLACK : Color.WHITE);
+    }
 
 }
