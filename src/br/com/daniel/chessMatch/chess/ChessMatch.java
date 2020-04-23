@@ -128,7 +128,8 @@ public class ChessMatch {
     private Piece makeMovie(Position source, Position target) {
 
         Piece capturedPiece = board.removePiece(target);
-        Piece sourcePiece = board.removePiece(source);
+        ChessPiece sourcePiece = (ChessPiece)board.removePiece(source);
+        sourcePiece.increaseMoveCount();
 
         board.placePiece(sourcePiece, target);
 
@@ -141,7 +142,9 @@ public class ChessMatch {
     }
 
     public void undoMove(Position source, Position target, Piece capturedPiece) {
-        Piece p = board.removePiece(target);
+        ChessPiece p = (ChessPiece) board.removePiece(target);
+        p.decreaseMoveCount();
+        
         board.placePiece(p, source);
 
         if (capturedPiece != null) {
@@ -157,23 +160,34 @@ public class ChessMatch {
     }
 
     public boolean testCheckmate (Color color){
+        //verificando se a peça do adversário está em check, se não estiver, o método é interrompido por um return false.
         if(!testeCheck(color)){
             return false;
         }
+        //pega a peça do adversário e armazena em uma lista.
         List<Piece> pieces = piecesOnTheBoard.stream().filter(x -> ((ChessPiece)x).getColor() == color).collect(Collectors.toList());
 
+        //for para pegar cada peça "P" do adversário.
         for(Piece p: pieces){
-            ChessPiece piece = (ChessPiece)p;
+            //criado uma lista auxiliar para armazenar os possíveis movimentos de peça do adversario.
             boolean [][] mat = p.possibleMoves();
 
-            for(int i=0; i < piece.getChessPosition().getRow(); i++){
-                for(int j=0; j < piece.getChessPosition().getColum(); j++){
+            for(int i=0; i < getBoard().getRows(); i++){
+                for(int j=0; j <getBoard().getColumns(); j++){
+                    //se em uma determinada posiçao I, J tiver um possível movimento é feita a verificaçao.
                     if(mat[i][j]){
+                        //a instancia target é representada para a Position distino, na qual a peça ira se deslocar.
                         Position target = new Position(i,j);
+                        //a position da peça do adversário é instanciada como source.
                         Position source = ((ChessPiece) p).getChessPosition().toPosition();
+                        //após fazer o movimento, o método retorna a peça capturada.
                         Piece capturedPiece = makeMovie(source,target);
+                        //após o movimento, é verificado se a peça do adversario ainda está em check
                         boolean check = testeCheck(color);
+                        //depois de armazenar o resultado em uma variavel, o movimento é desfeito.
                         undoMove(source,target,capturedPiece);
+                        //se existir uma movimentaçao possivel que tire do check, então é retornando false.
+                        //pois o jogador nao esta em CHECKMATE
                         if(!check){
                             return  false;
                         }
@@ -181,6 +195,7 @@ public class ChessMatch {
                 }
             }
         }
+        //se nenhuma peça escapar do CHECK, então retorna true, pois o jogador entrou em CHECKMATE.
         return true;
     }
 
