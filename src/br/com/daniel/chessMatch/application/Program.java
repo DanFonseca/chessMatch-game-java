@@ -16,7 +16,7 @@ public class Program {
         ChessPiece captured;
         ChessMatch chessMatch = new ChessMatch();
 
-        while (true) {
+        while (!chessMatch.getCheckMate()) {
             try {
                 UI.clearScreen();
                 UI.PrintMatch(chessMatch, capturedPieces);
@@ -37,6 +37,8 @@ public class Program {
                 System.out.println(e.getMessage());
             }
         }
+        UI.PrintMatch(chessMatch, capturedPieces);
+
     }
 }
 
