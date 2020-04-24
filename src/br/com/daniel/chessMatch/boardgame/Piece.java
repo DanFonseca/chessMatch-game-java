@@ -15,6 +15,8 @@ public abstract class Piece {
         return board;
     }
 
+
+
     /*
         Método abstrado para que as classes especializadas implementem.
      */
