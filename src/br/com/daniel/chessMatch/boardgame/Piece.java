@@ -20,7 +20,7 @@ public abstract class Piece {
     /*
         Método abstrado para que as classes especializadas implementem.
      */
-    public abstract boolean[][] possibleMoves();
+    public abstract boolean [][] possibleMoves();
     /**
         Método concreeto que recebe uma determinada @Position
         Este método irá chamar a classe abstrata, utirlizando a técnica de Hook Method
