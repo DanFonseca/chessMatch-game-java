@@ -15,7 +15,7 @@ public class ChessMatch {
     private Color currentPlayer;
     private boolean check;
     private boolean checkMate;
-    private ChessPiece enPassartVulnereble;
+    private ChessPiece enPassantVulnerable;
     private ChessPiece promoted;
 
     List<Piece> piecesOnTheBoard = new ArrayList<>();
@@ -30,8 +30,8 @@ public class ChessMatch {
         InitialSetup();
     }
 
-    public ChessPiece getEnPassartVulnereble() {
-        return enPassartVulnereble;
+    public ChessPiece getEnPassantVulnerable() {
+        return enPassantVulnerable;
     }
 
     public Board getBoard() {
@@ -138,11 +138,11 @@ public class ChessMatch {
         }
 
         // #specialMove en passant
-        if (movedPiece instanceof Pawn && (target.getRow() == source.getRow() - 2)
-                || target.getRow() == source.getRow() + 2) {
-            enPassartVulnereble = movedPiece;
-        } else {
-            enPassartVulnereble = null;
+        if (movedPiece instanceof Pawn && (target.getRow() == source.getRow() - 2 || target.getRow() == source.getRow() + 2)) {
+            enPassantVulnerable = movedPiece;
+        }
+        else {
+            enPassantVulnerable = null;
         }
 
         //downcast  (ChessPiece <- Piece)
@@ -166,47 +166,45 @@ public class ChessMatch {
 
     private Piece makeMovie(Position source, Position target) {
 
-        Piece capturedPiece = board.removePiece(target);
-        ChessPiece sourcePiece = (ChessPiece) board.removePiece(source);
-        sourcePiece.increaseMoveCount();
+        ChessPiece p = (ChessPiece)board.removePiece(source);
 
-        board.placePiece(sourcePiece, target);
+        p.increaseMoveCount();
+        Piece capturedPiece = board.removePiece(target);
+        board.placePiece(p, target);
 
         if (capturedPiece != null) {
             piecesOnTheBoard.remove(capturedPiece);
             capturedPieces.add(capturedPiece);
         }
 
-        //special move castling king side rook
-        if (capturedPiece instanceof King && target.getColum() == source.getColum() + 2) {
+        // #specialmove castling kingside rook
+        if (p instanceof King && target.getColum() == source.getColum() + 2) {
             Position sourceT = new Position(source.getRow(), source.getColum() + 3);
             Position targetT = new Position(source.getRow(), source.getColum() + 1);
-            ChessPiece rook = (ChessPiece) board.removePiece(sourceT);
+            ChessPiece rook = (ChessPiece)board.removePiece(sourceT);
             board.placePiece(rook, targetT);
             rook.increaseMoveCount();
         }
-        //special move castling queen side rook
-        if (capturedPiece instanceof King && target.getColum() == source.getColum() - 2) {
+        // #specialmove castling queenside rook
+        if (p instanceof King && target.getColum() == source.getColum() - 2) {
             Position sourceT = new Position(source.getRow(), source.getColum() - 4);
             Position targetT = new Position(source.getRow(), source.getColum() - 1);
-            ChessPiece rook = (ChessPiece) board.removePiece(sourceT);
+            ChessPiece rook = (ChessPiece)board.removePiece(sourceT);
             board.placePiece(rook, targetT);
             rook.increaseMoveCount();
         }
 
-        //special move en passant
-
-        if (capturedPiece instanceof Pawn) {
+        // #specialmove en passant
+        if (p instanceof Pawn) {
             if (source.getColum() != target.getColum() && capturedPiece == null) {
-                ChessPiece p = (ChessPiece) capturedPiece;
-                Position pawPosition;
-
+                Position pawnPosition;
                 if (p.getColor() == Color.WHITE) {
-                    pawPosition = new Position(target.getRow() + 1, target.getColum());
-                } else {
-                    pawPosition = new Position(target.getRow() - 1, target.getColum());
+                    pawnPosition = new Position(target.getRow() + 1, target.getColum());
                 }
-                capturedPiece = board.removePiece((Position) pawPosition);
+                else {
+                    pawnPosition = new Position(target.getRow() - 1, target.getColum());
+                }
+                capturedPiece = board.removePiece(pawnPosition);
                 capturedPieces.add(capturedPiece);
                 piecesOnTheBoard.remove(capturedPiece);
             }
