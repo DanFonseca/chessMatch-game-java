@@ -6,6 +6,7 @@ import br.com.daniel.chessMatch.boardgame.Position;
 import br.com.daniel.chessMatch.chess.Pieces.*;
 import br.com.daniel.chessMatch.exceptions.ChessException;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,6 +33,10 @@ public class ChessMatch {
 
     public ChessPiece getEnPassantVulnerable() {
         return enPassantVulnerable;
+    }
+
+    public ChessPiece getPromoted() {
+        return promoted;
     }
 
     public Board getBoard() {
@@ -129,6 +134,14 @@ public class ChessMatch {
 
         ChessPiece movedPiece = (ChessPiece) board.getPiece(target);
 
+        //#special move promoted
+        promoted = null;
+        if(movedPiece.getColor() == Color.WHITE && target.getRow() == 0 ||
+        movedPiece.getColor() == Color.BLACK && target.getRow() == 7) {
+            promoted = (ChessPiece) board.getPiece(target);
+            promoted = replacePromotedPiece("Q");
+        }
+
         check = testeCheck(getOpponent(currentPlayer));
 
         if (testCheckmate(getOpponent(currentPlayer))) {
@@ -147,6 +160,31 @@ public class ChessMatch {
 
         //downcast  (ChessPiece <- Piece)
         return (ChessPiece) capturedPiece;
+    }
+
+    public ChessPiece replacePromotedPiece(String type) {
+        if(promoted == null){
+            throw new IllegalStateException("Não há peça para ser promovida");
+        }
+        if(!type.equals("B") && !type.equals("R") && !type.equals("N") && !type.equals("Q")){
+            throw new InvalidParameterException("Invalid type for promotion");
+        }
+        Position pos = promoted.getChessPosition().toPosition();
+        Piece  p = board.removePiece(pos);
+        piecesOnTheBoard.remove(p);
+
+        ChessPiece newPiece = newPiece(type, promoted.getColor());
+        board.placePiece(newPiece, pos);
+        piecesOnTheBoard.add(newPiece);
+
+        return newPiece;
+    }
+
+    public ChessPiece newPiece (String type, Color color){
+        if(type.equals("B")) return new Bishop(board, color);
+        if(type.equals("R")) return new Rook(board, color);
+        if(type.equals("N")) return new Knight(board, color);
+        return new Queen(board, color);
     }
 
     /**
