@@ -5,6 +5,7 @@ import br.com.daniel.chessMatch.chess.ChessPiece;
 import br.com.daniel.chessMatch.chess.ChessPosition;
 import br.com.daniel.chessMatch.exceptions.ChessException;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -34,10 +35,16 @@ public class Program {
                     capturedPieces.add(captured);
                 }
                 if(chessMatch.getPromoted() !=null){
-                    System.out.print("Enter pieces for promotion (B/N/R/Q): ");
-                    String type = sc.next();
-                    chessMatch.replacePromotedPiece(type);
 
+                    System.out.print("Enter pieces for promotion (B/N/R/Q): ");
+                    String type = sc.next().toUpperCase();
+
+                    while(!type.equals("B") && !type.equals("N") && !type.equals("R") && !type.equals("Q")){
+                        System.out.print("Type incorrect, enter the correct Type (B/N/R/Q): ");
+                        type = sc.next().toUpperCase();
+                    }
+
+                    chessMatch.replacePromotedPiece(type);
                 }
 
             } catch (ChessException e) {
